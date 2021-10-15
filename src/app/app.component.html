@@ -41,7 +41,7 @@
       <ng-container matColumnDef="edit">
         <th mat-header-cell *matHeaderCellDef> edit</th>
         <td mat-cell *matCellDef="let row; let index = index">
-          <button type="submit" (click)="saveForm()">Save</button>
+          <button type="submit" (click)="saveForm(form.value)">Save</button>
           <button type="button">Delete</button>
         </td>
       </ng-container>

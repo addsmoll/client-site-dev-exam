@@ -5,21 +5,22 @@ import {environment} from "../environments/environment";
 
 @Injectable({providedIn: "root"})
 export class ApiService {
-  readonly url = environment.baseUrl;
+  readonly apiUrl = environment.apiUrl;
 
   constructor(private httpClient: HttpClient) {
   }
 
   getData(): Observable<any> {
-    return this.httpClient.get(this.url);
+    return this.httpClient.get(this.apiUrl);
   }
 
-  saveData(model: any): Observable<any> {
-    return this.httpClient.post(this.url, model);
+  saveData(arr: any): Observable<any> {
+    console.log('mail', JSON.stringify({result: arr}));
+    return this.httpClient.post(this.apiUrl, JSON.stringify({result: arr}));
   }
 
   deleteData(): Observable<any> {
-    return this.httpClient.delete(this.url);
+    return this.httpClient.delete(this.apiUrl);
   }
 
 }

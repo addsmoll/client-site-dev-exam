@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  baseUrl: "http://localhost:4200/assets"
+  mockUrl: "http://localhost:4200/assets/mock.json",
+  apiUrl: "http://localhost:4200/api"
 };

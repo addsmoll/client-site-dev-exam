@@ -13,7 +13,7 @@ import validate = WebAssembly.validate;
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy{
-  tableData: any;
+  tableData: MockModel[];
   displayColumns = ["cowId", "healthIndex", "animalId", "lactationNumber", "ageInDays", "edit"];
   form: FormGroup;
 
@@ -65,9 +65,12 @@ export class AppComponent implements OnInit, OnDestroy{
     });
   }
 
-  saveForm() {
-    const model = this.form.value;
-    console.log('model', model);
-    this.apiService.saveData(model);
+   saveForm(model: MockModel) {
+    const newArr: MockModel[] = this.tableData.filter(f => f.cowId === model.cowId);
+    newArr.push(model);
+    this.apiService.saveData(newArr);
   }
+
+
+
 }
