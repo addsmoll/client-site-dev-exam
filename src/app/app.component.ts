@@ -1,40 +1,73 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ApiService} from "./api.service";
-import {FormControl, FormGroup} from "@angular/forms";
-
-
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {Subject} from "rxjs";
+import {takeUntil} from "rxjs/operators";
+import {MockModel} from "./mock.model";
+import {MockInterface} from "./mock.interface";
+import validate = WebAssembly.validate;
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy{
   tableData: any;
   displayColumns = ["cowId", "healthIndex", "animalId", "lactationNumber", "ageInDays", "edit"];
-  // dataSchema = {
-  //   "cowId": "number",
-  //   "healthIndex": "number",
-  //   "animalId": "text",
-  //   "lactationNumber": "number",
-  //   "ageInDays": "number"
-  // }
-  // isReadOnly = {
-  //   "cowId": true
-  // }
+  form: FormGroup;
 
-  form = new FormGroup({
-    cowId: new FormControl(),
-    healthIndex: new FormControl(),
-    animalId: new FormControl(),
-    lactationNumber: new FormControl(),
-    ageInDays: new FormControl(),
-    edit: new FormControl(),
-  });
+
+  // Private
+  private _unsubscribeAll: Subject<any>;
 
   constructor(
     private apiService: ApiService,
+    private _formBuilder: FormBuilder,
   ) {
-    this.apiService.getData().subscribe(res => this.tableData = res.result);
+    this._unsubscribeAll = new Subject();
+  }
+
+  ngOnInit(): void {
+    this.form = this._formBuilder.group({
+      cowId: [''],
+      healthIndex: [''],
+      animalId: [''],
+      lactationNumber: [''],
+      ageInDays: [''],
+      edit: [''],
+    });
+
+    this.apiService.getData()
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(res => {
+        this.tableData = res.result;
+        res.result.forEach((e: any) => {
+          this.loadForm(e);
+        })
+
+      });
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribeAll.next();
+    this._unsubscribeAll.complete();
+  }
+
+  loadForm(tableData: any) {
+    this.form.patchValue({
+      cowId: tableData.cowId,
+      healthIndex: tableData.healthIndex,
+      animalId: tableData.animalId,
+      lactationNumber: tableData.lactationNumber,
+      ageInDays: tableData.ageInDays,
+      edit: tableData.edit
+    });
+  }
+
+  saveForm() {
+    const model = this.form.value;
+    console.log('model', model);
+    this.apiService.saveData(model);
   }
 }

@@ -120,9 +120,11 @@ export class BackendInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (request.method === "GET") {
+      console.log('get', request.body);
       return of(new HttpResponse({status: 200, body: dataMock}));
     }
-    if (request.method === "POST" && request.url === "http://localhost:4200") {
+    if (request.method === "POST" && request.url === "http://localhost:4200/api") {
+      console.log('post', request.body);
 
     }
     return next.handle(request)
