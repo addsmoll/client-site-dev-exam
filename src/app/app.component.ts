@@ -71,6 +71,17 @@ export class AppComponent implements OnInit, OnDestroy{
     this.apiService.saveData(newArr);
   }
 
+  deleteForm(model: MockModel) {
+    const newArr: MockModel[] = this.tableData.filter(f => f.cowId === model.cowId);
+    this.apiService.saveData(newArr);
+  }
+
+  addForm() {
+    const newEl: MockModel = new MockModel();
+    this.tableData.push(newEl);
+    this.apiService.saveData(this.tableData);
+  }
+
 
 
 }

@@ -13,12 +13,13 @@ export class MockModel{
    *
    * @param data
    */
-  constructor(data: MockModel) {
-    this.cowId = data.cowId;
-    this.healthIndex = data.healthIndex;
-    this.animalId = data.animalId;
-    this.lactationNumber = data.lactationNumber;
-    this.ageInDays = data.ageInDays;
+  constructor(data?) {
+    data = data || {};
+    this.cowId = data.cowId || null;
+    this.healthIndex = data.healthIndex || null;
+    this.animalId = data.animalId || null;
+    this.lactationNumber = data.lactationNumber || null;
+    this.ageInDays = data.ageInDays || null;
   }
 
 }
