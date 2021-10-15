@@ -1,0 +1,66 @@
+<h2>Client-Side Developer Exam</h2>
+<p>Please. double click to edit the form!</p>
+
+<ngx-datatable
+    #table
+    class="material"
+    [headerHeight]="40"
+    [limit]="10"
+    [columnMode]="'force'"
+    [footerHeight]="50"
+    [rowHeight]="'auto'"
+    [rows]="rows"
+    [loadingIndicator]="loadingIndicator"
+    [selected]="selected"
+    (activate)="onActivate($event)"
+    (select)='onSelect($event)'>
+  <ngx-datatable-column name="cowId">
+    <ng-template ngx-datatable-cell-template let-value="value">
+      {{value}}
+    </ng-template>
+  </ngx-datatable-column>
+
+    <ngx-datatable-column name="healthIndex">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+        <span
+          title="Double click to edit"
+          (dblclick)="editing[row.$$index] = true"
+          *ngIf="!editing[row.$$index]">
+          {{value}}
+        </span>
+        <select
+          *ngIf="editing[row.$$index + '-gender']"
+          (change)="updateValue($event, 'gender', value, row)"
+          [value]="value">
+        </select>
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="animalId">
+      <ng-template ngx-datatable-cell-template let-value="value">
+        {{value}}
+      </ng-template>
+    </ngx-datatable-column>
+  <ngx-datatable-column name="lactationNumber">
+    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
+        <span
+          title="Double click to edit"
+          (dblclick)="editing[row.$$index + '-name'] = true"
+          *ngIf="!editing[row.$$index + '-name']">
+          {{value}}
+        </span>
+      <input
+        autofocus
+        (blur)="updateValue($event, 'name', value, row)"
+        *ngIf="editing[row.$$index + '-name']"
+        type="text"
+        [value]="value"
+      />
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="ageInDays">
+    <ng-template ngx-datatable-cell-template let-value="value">
+      {{value}}
+    </ng-template>
+  </ngx-datatable-column>
+
+</ngx-datatable>

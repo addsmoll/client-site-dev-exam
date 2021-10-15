@@ -1,11 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ApiService} from "./api.service";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup} from "@angular/forms";
 import {Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
 import {MockModel} from "./mock.model";
-import {MockInterface} from "./mock.interface";
-import validate = WebAssembly.validate;
 
 @Component({
   selector: 'app-root',
@@ -35,17 +33,15 @@ export class AppComponent implements OnInit, OnDestroy{
       animalId: [''],
       lactationNumber: [''],
       ageInDays: [''],
-      edit: [''],
     });
 
     this.apiService.getData()
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(res => {
-        this.tableData = res.result;
-        res.result.forEach((e: any) => {
-          this.loadForm(e);
-        })
-
+        this.tableData = res;
+        res.forEach((e: any) => {
+          this.loadForm(new MockModel(e));
+        });
       });
   }
 
@@ -61,18 +57,18 @@ export class AppComponent implements OnInit, OnDestroy{
       animalId: tableData.animalId,
       lactationNumber: tableData.lactationNumber,
       ageInDays: tableData.ageInDays,
-      edit: tableData.edit
+
     });
   }
 
    saveForm(model: MockModel) {
-    const newArr: MockModel[] = this.tableData.filter(f => f.cowId === model.cowId);
+    const newArr: MockModel[] = this.tableData.filter(f => f.cowId !== model.cowId);
     newArr.push(model);
     this.apiService.saveData(newArr);
   }
 
   deleteForm(model: MockModel) {
-    const newArr: MockModel[] = this.tableData.filter(f => f.cowId === model.cowId);
+    const newArr: MockModel[] = this.tableData.filter(f => f.cowId !== model.cowId);
     this.apiService.saveData(newArr);
   }
 

@@ -9,6 +9,11 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {BackendInterceptor} from "./backend.interceptor";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatDatepickerModule} from "@angular/material/datepicker";
+import {RouterModule, Routes} from "@angular/router";
+const appRoutes: Routes = [
+  { path: '',  loadChildren: () => import ('./table/table.module').then(m => m.TableModule) },
+
+];
 
 @NgModule({
   declarations: [
@@ -22,7 +27,9 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
     ReactiveFormsModule,
     MatTableModule,
     MatFormFieldModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    RouterModule.forRoot(appRoutes)
+
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
