@@ -26,8 +26,8 @@ export class MockModel{
   {
     function S4(): string
     {
-      return Math.floor((1 + Math.random()) * 0x10)
-        .toString(2)
+      return Math.floor((1 + Math.random()) * 0x1000)
+        .toString(8)
         .substring(1);
     }
 

@@ -11,12 +11,13 @@ export class ApiService {
   constructor(private httpClient: HttpClient) {
   }
 
-  saveData(arr: MockModel[]) {
-    console.log('saveArr', arr);
-    localStorage.setItem('mock', JSON.stringify(arr));
-  }
-
   getData():Observable<any> {
     return this.httpClient.get(this.apiUrl);
   }
+
+  saveData(arr: MockModel[]) {
+    localStorage.setItem('mock', JSON.stringify(arr));
+    return this.httpClient.post(this.apiUrl, arr);
+  }
+
 }

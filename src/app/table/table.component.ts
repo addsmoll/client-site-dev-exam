@@ -55,8 +55,14 @@ export class TableComponent implements OnInit, OnDestroy{
       this.rows = JSON.parse(initData);
     }
   }
+/*
+  public getModel(): void {
+    this.apiService.getData().subscribe( rows =>
+      this.rows = rows
+    );
+ }*/
 
-  updateValue(event, cell, rowIndex) {
+    updateValue(event, cell, rowIndex) {
     console.log('inline editing rowIndex', rowIndex);
     this.editing[rowIndex + '-' + cell] = false;
     this.rows[rowIndex][cell] = event.target.value;
@@ -100,6 +106,5 @@ export class TableComponent implements OnInit, OnDestroy{
     this.apiService.saveData(this.rows);
     this.selected = [];
   }
-
 
 }

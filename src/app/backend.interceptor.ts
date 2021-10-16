@@ -9,9 +9,14 @@ export class BackendInterceptor implements HttpInterceptor {
   readonly apiUrl = environment.apiUrl;
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    console.log(request.method);
     request = request.clone({
       url: request.url === this.apiUrl ? this.mockUrl : request.url
     });
+
+    if (request.method === 'POST') {
+      localStorage.setItem('mock', JSON.stringify(request.body));
+    }
     return next.handle(request)
   }
 
