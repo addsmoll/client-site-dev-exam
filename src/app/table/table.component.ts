@@ -1,7 +1,7 @@
 import {Component, ViewEncapsulation, ViewChild, OnInit, OnDestroy} from '@angular/core';
 import {ColumnMode, DatatableComponent} from '@swimlane/ngx-datatable';
 import {ApiService} from "../api.service";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormGroup} from "@angular/forms";
 import {takeUntil} from "rxjs/operators";
 import {MockModel} from "../mock.model";
 import {Subject} from "rxjs";
@@ -32,23 +32,26 @@ export class TableComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-   const initData = localStorage.getItem('mock');
-   if (!initData) {
-     this.apiService.getData()
-       .pipe(takeUntil(this._unsubscribeAll))
-       .subscribe(res => {
-         this.temp = [...res];
-         this.rows = res;
-       });
-   } else{
-     this.rows = JSON.parse(initData);
-   }
-
+   this.fetchData();
   }
 
   ngOnDestroy(): void {
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();
+  }
+
+  fetchData() {
+    const initData = localStorage.getItem('mock');
+    if (!initData) {
+      this.apiService.getData()
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe(res => {
+          this.temp = [...res];
+          this.rows = res;
+        });
+    } else{
+      this.rows = JSON.parse(initData);
+    }
   }
 
   updateValue(event, cell, rowIndex) {
@@ -79,7 +82,6 @@ export class TableComponent implements OnInit, OnDestroy{
     // console.log('Activate Event', event);
   }
 
-
   saveRows(rows: MockModel[]) {
     this.apiService.saveData(rows);
   }
@@ -97,6 +99,7 @@ export class TableComponent implements OnInit, OnDestroy{
 
   onDeleteRows(models: MockModel[]) {
    models.forEach((e) => {
+     console.log('eCowId', e.cowId);
      let index = this.rows.findIndex(f => f.cowId === e.cowId);
      if (index !== -1) {
        this.rows.splice(index, 1);

@@ -15,11 +15,23 @@ export class MockModel{
    */
   constructor(data?) {
     data = data || {};
-    this.cowId = data.cowId || null;
-    this.healthIndex = data.healthIndex || null;
-    this.animalId = data.animalId || null;
-    this.lactationNumber = data.lactationNumber || null;
-    this.ageInDays = data.ageInDays || null;
+    this.cowId = data.cowId || this.generateID();
+    this.healthIndex = data.healthIndex || 0;
+    this.animalId = data.animalId || 0;
+    this.lactationNumber = data.lactationNumber || 0;
+    this.ageInDays = data.ageInDays || 0;
+  }
+
+  private generateID(): string
+  {
+    function S4(): string
+    {
+      return Math.floor((1 + Math.random()) * 0x10)
+        .toString(2)
+        .substring(1);
+    }
+
+    return S4();
   }
 
 }

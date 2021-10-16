@@ -19,5 +19,4 @@ export class ApiService {
   getData():Observable<any> {
     return this.httpClient.get(this.apiUrl);
   }
-
 }
