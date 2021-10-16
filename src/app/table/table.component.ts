@@ -12,13 +12,13 @@ import {Subject} from "rxjs";
   encapsulation: ViewEncapsulation.None
 })
 export class TableComponent implements OnInit, OnDestroy{
-  tableData: MockModel[];
+  rows: MockModel[];
   form: FormGroup;
 
   // Private
   private _unsubscribeAll: Subject<any>;
   editing = {};
-  rows = [];
+
   temp = [];
   selected = [];
   loadingIndicator: boolean = true;
@@ -63,16 +63,35 @@ export class TableComponent implements OnInit, OnDestroy{
 
   }
 
-  onDeleteRow(row) {
-
-  }
-
   addRow() {
-
+    const newEl: MockModel = new MockModel();
+    this.rows.push(newEl);
+    this.apiService.saveData(this.rows);
   }
 
   onActivate(event) {
     // console.log('Activate Event', event);
   }
+
+
+  saveForm(model: MockModel) {
+    const newArr: MockModel[] = this.rows.filter(f => f.cowId === model.cowId);
+    newArr.push(model);
+    this.apiService.saveData(newArr);
+  }
+
+  onDeleteRows(models: MockModel[]) {
+   let newArr = [];
+   models.forEach((e) => {
+     if (models.some(s=>s.cowId !==e.cowId)){
+       newArr = this.rows.filter(f => f.cowId !== e.cowId);
+     }
+
+   });
+
+    console.log('newArr', newArr.length);
+    this.apiService.saveData(newArr);
+  }
+
 
 }

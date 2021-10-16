@@ -12,6 +12,7 @@
     [rows]="rows"
     [loadingIndicator]="loadingIndicator"
     [selected]="selected"
+
     [selectionType]="'checkbox'"
     (activate)="onActivate($event)"
     (select)='onSelect($event)'>
@@ -78,5 +79,10 @@
   </ngx-datatable-column>
 
 </ngx-datatable>
+
+<button (click)="onDeleteRows(selected)" *ngIf="selected.length > 0" mat-icon-button><mat-icon [matBadge]="selected.length" matBadgeColor="warn" color="primary">delete</mat-icon></button>
+
+<button style="margin-left: 10px" (click)="addRow()" mat-icon-button><mat-icon color="primary">add</mat-icon></button>
+
 
 

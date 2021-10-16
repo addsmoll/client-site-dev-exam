@@ -4,6 +4,9 @@ import { RouterModule } from '@angular/router';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { TableComponent } from './table.component';
 import {ApiService} from "../api.service";
+import {MatIconModule} from "@angular/material/icon";
+import {MatButtonModule} from "@angular/material/button";
+import {MatBadgeModule} from "@angular/material/badge";
 
 export const routes = [
   { path: '', component: TableComponent }
@@ -13,8 +16,11 @@ export const routes = [
   imports: [
     CommonModule,
     RouterModule,
+    MatIconModule,
+    MatButtonModule,
     NgxDatatableModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    MatBadgeModule
   ],
   declarations: [
     TableComponent
