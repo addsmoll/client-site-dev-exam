@@ -6,55 +6,69 @@
     class="material"
     [headerHeight]="40"
     [limit]="10"
-    [columnMode]="'force'"
+    [columnMode]="ColumnMode.force"
     [footerHeight]="50"
     [rowHeight]="'auto'"
     [rows]="rows"
     [loadingIndicator]="loadingIndicator"
     [selected]="selected"
+    [selectionType]="'checkbox'"
     (activate)="onActivate($event)"
     (select)='onSelect($event)'>
+  <ngx-datatable-column
+    [width]="30"
+    [sortable]="false"
+    [canAutoResize]="false"
+    [draggable]="true"
+    [resizeable]="false"
+    [headerCheckboxable]="true"
+    [checkboxable]="true">
+  </ngx-datatable-column>
   <ngx-datatable-column name="cowId">
     <ng-template ngx-datatable-cell-template let-value="value">
       {{value}}
     </ng-template>
   </ngx-datatable-column>
 
-    <ngx-datatable-column name="healthIndex">
-      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-        <span
-          title="Double click to edit"
-          (dblclick)="editing[row.$$index] = true"
-          *ngIf="!editing[row.$$index]">
-          {{value}}
-        </span>
-        <select
-          *ngIf="editing[row.$$index + '-gender']"
-          (change)="updateValue($event, 'gender', value, row)"
-          [value]="value">
-        </select>
-      </ng-template>
-    </ngx-datatable-column>
     <ngx-datatable-column name="animalId">
-      <ng-template ngx-datatable-cell-template let-value="value">
-        {{value}}
+      <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row" let-value="value">
+            <span
+              title="Double click to edit"
+              (dblclick)="editing[rowIndex + '-animalId'] = true"
+              *ngIf="!editing[rowIndex + '-animalId']"
+            >
+              {{ value }}
+            </span>
+        <input
+          *ngIf="editing[rowIndex + '-animalId']"
+          (blur)="editing[rowIndex + '-animalId'] = false"
+          (change)="updateValue($event, 'animalId', rowIndex)"
+          [value]="value"
+        >
       </ng-template>
     </ngx-datatable-column>
+<!--    <ngx-datatable-column name="animalId">-->
+<!--      <ng-template ngx-datatable-cell-template let-value="value">-->
+<!--        {{value}}-->
+<!--      </ng-template>-->
+<!--    </ngx-datatable-column>-->
   <ngx-datatable-column name="lactationNumber">
-    <ng-template ngx-datatable-cell-template let-value="value" let-row="row">
-        <span
-          title="Double click to edit"
-          (dblclick)="editing[row.$$index + '-name'] = true"
-          *ngIf="!editing[row.$$index + '-name']">
-          {{value}}
-        </span>
-      <input
-        autofocus
-        (blur)="updateValue($event, 'name', value, row)"
-        *ngIf="editing[row.$$index + '-name']"
-        type="text"
+    <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row" let-value="value">
+            <span
+              title="Double click to edit"
+              (dblclick)="editing[rowIndex + '-lactationNumber'] = true"
+              *ngIf="!editing[rowIndex + '-lactationNumber']"
+            >
+              {{ value }}
+            </span>
+      <select
+        *ngIf="editing[rowIndex + '-lactationNumber']"
+        (blur)="editing[rowIndex + '-lactationNumber'] = false"
+        (change)="updateValue($event, 'lactationNumber', rowIndex)"
         [value]="value"
-      />
+      >
+        <option *ngFor="let value of [1,2,3,4,5,6,7,8,9,10]" [value]=value>{{value}}</option>
+      </select>
     </ng-template>
   </ngx-datatable-column>
   <ngx-datatable-column name="ageInDays">
@@ -64,3 +78,5 @@
   </ngx-datatable-column>
 
 </ngx-datatable>
+
+
