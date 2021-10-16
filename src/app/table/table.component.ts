@@ -67,7 +67,6 @@ export class TableComponent implements OnInit, OnDestroy{
 
   onSelect({ selected }) {
    if (selected) {
-     console.log('Select Event', selected);
      this.selected.splice(0, this.selected.length);
      this.selected.push(...selected);
    }
@@ -76,9 +75,8 @@ export class TableComponent implements OnInit, OnDestroy{
 
   addRow() {
     let newArr = [];
-    const newEl: MockModel = new MockModel();
-   this.rows.push(Object.assign({}, newEl));
-    this.saveRows(this.rows);
+    this.rows.push(Object.assign({}, new MockModel()));
+    this.apiService.saveData(this.rows);
   }
 
   onActivate(event) {
@@ -105,6 +103,7 @@ export class TableComponent implements OnInit, OnDestroy{
       newArr = this.rows.filter(f => f.cowId !== models[0].cowId);
       this.rows = newArr;
     this.apiService.saveData(this.rows);
+    this.selected = [];
   }
 
 

@@ -1,9 +1,10 @@
 <h2>Client-Side Developer Exam</h2>
+<p class="text-muted">Link to the task: <a href="https://drive.google.com/file/d/17iQiK8J1ApRA7vMBPOpGqZtNutQEm0fg/view?usp=sharing" target="_blank" class="font-weight-bold transition">https://drive.google.com</a>.</p>
 <p>Please. double click to edit the form!</p>
-<button (click)="refreshRows()" *ngIf="rows?.length <= 6" mat-icon-button color="primary"><mat-icon>update</mat-icon></button>
+<button (click)="refreshRows()" mat-icon-button color="primary"><mat-icon>update</mat-icon></button>
 <ngx-datatable
     #table
-    class="material"
+    class="material cursor-pointer"
     [headerHeight]="80"
     [limit]="50"
     [columnMode]="ColumnMode.force"
@@ -25,20 +26,34 @@
     [headerCheckboxable]="true"
     [checkboxable]="true">
   </ngx-datatable-column>
-  <ngx-datatable-column name="edit">
-    <ng-template ngx-datatable-cell-template let-value="value">
-
-    </ng-template>
-  </ngx-datatable-column>
   <ngx-datatable-column name="cowId">
     <ng-template ngx-datatable-cell-template let-value="value">
       {{value}}
     </ng-template>
   </ngx-datatable-column>
 
+
+  <ngx-datatable-column name="heatIndexPeak">
+    <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row" let-value="value">
+            <span class="cursor-pointer"
+              title="Double click to edit"
+              (dblclick)="editing[rowIndex + '-heatIndexPeak'] = true"
+              *ngIf="!editing[rowIndex + '-heatIndexPeak']"
+            >
+              {{ value }}
+            </span>
+      <input
+        *ngIf="editing[rowIndex + '-heatIndexPeak']"
+        (blur)="editing[rowIndex + '-heatIndexPeak'] = false"
+        (change)="updateValue($event, 'heatIndexPeak', rowIndex)"
+        [value]="value"
+      >
+    </ng-template>
+  </ngx-datatable-column>
+
     <ngx-datatable-column name="animalId">
       <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row" let-value="value">
-            <span
+            <span class="cursor-pointer"
               title="Double click to edit"
               (dblclick)="editing[rowIndex + '-animalId'] = true"
               *ngIf="!editing[rowIndex + '-animalId']"
@@ -54,33 +69,39 @@
       </ng-template>
 
     </ngx-datatable-column>
-<!--    <ngx-datatable-column name="animalId">-->
-<!--      <ng-template ngx-datatable-cell-template let-value="value">-->
-<!--        {{value}}-->
-<!--      </ng-template>-->
-<!--    </ngx-datatable-column>-->
+
   <ngx-datatable-column name="lactationNumber">
     <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row" let-value="value">
-            <span
+            <span class="cursor-pointer"
               title="Double click to edit"
               (dblclick)="editing[rowIndex + '-lactationNumber'] = true"
               *ngIf="!editing[rowIndex + '-lactationNumber']"
             >
               {{ value }}
             </span>
-      <select
+      <input
         *ngIf="editing[rowIndex + '-lactationNumber']"
         (blur)="editing[rowIndex + '-lactationNumber'] = false"
         (change)="updateValue($event, 'lactationNumber', rowIndex)"
         [value]="value"
       >
-        <option *ngFor="let value of [1,2,3,4,5,6,7,8,9,10]" [value]=value>{{value}}</option>
-      </select>
     </ng-template>
   </ngx-datatable-column>
   <ngx-datatable-column name="ageInDays">
-    <ng-template ngx-datatable-cell-template let-value="value">
-      {{value}}
+    <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-row="row" let-value="value">
+            <span class="cursor-pointer"
+              title="Double click to edit"
+              (dblclick)="editing[rowIndex + '-ageInDays'] = true"
+              *ngIf="!editing[rowIndex + '-ageInDays']"
+            >
+              {{ value }}
+            </span>
+      <input
+        *ngIf="editing[rowIndex + '-ageInDays']"
+        (blur)="editing[rowIndex + '-ageInDays'] = false"
+        (change)="updateValue($event, 'ageInDays', rowIndex)"
+        [value]="value"
+      >
     </ng-template>
   </ngx-datatable-column>
   <ngx-datatable-footer *ngIf="true">
