@@ -9,19 +9,20 @@ import {Subject} from "rxjs";
 @Component({
   selector: 'app-ngx',
   templateUrl: './table.component.html',
+  styleUrls: ['./table.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class TableComponent implements OnInit, OnDestroy{
   rows: MockModel[];
   form: FormGroup;
-
-  // Private
-  private _unsubscribeAll: Subject<any>;
   editing = {};
   temp = [];
   selected = [];
   loadingIndicator: boolean = true;
   ColumnMode = ColumnMode;
+
+  // Private
+  private _unsubscribeAll: Subject<any>;
 
   @ViewChild(DatatableComponent) table: DatatableComponent;
 
@@ -32,6 +33,7 @@ export class TableComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
+    setTimeout(() => { this.loadingIndicator = false; }, 1500);
    this.fetchData();
   }
 
@@ -65,7 +67,7 @@ export class TableComponent implements OnInit, OnDestroy{
 
   onSelect({ selected }) {
    if (selected) {
-     console.log('Select Event', selected, this.selected);
+     console.log('Select Event', selected);
      this.selected.splice(0, this.selected.length);
      this.selected.push(...selected);
    }
@@ -73,8 +75,9 @@ export class TableComponent implements OnInit, OnDestroy{
   }
 
   addRow() {
+    let newArr = [];
     const newEl: MockModel = new MockModel();
-    this.rows.push(newEl);
+   this.rows.push(Object.assign({}, newEl));
     this.saveRows(this.rows);
   }
 
@@ -98,14 +101,9 @@ export class TableComponent implements OnInit, OnDestroy{
   }
 
   onDeleteRows(models: MockModel[]) {
-   models.forEach((e) => {
-     console.log('eCowId', e.cowId);
-     let index = this.rows.findIndex(f => f.cowId === e.cowId);
-     if (index !== -1) {
-       this.rows.splice(index, 1);
-     }
-   });
-    console.log('newArr', this.rows.length);
+   let newArr = [];
+      newArr = this.rows.filter(f => f.cowId !== models[0].cowId);
+      this.rows = newArr;
     this.apiService.saveData(this.rows);
   }
 

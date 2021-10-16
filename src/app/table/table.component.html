@@ -7,14 +7,15 @@
     [headerHeight]="80"
     [limit]="50"
     [columnMode]="ColumnMode.force"
-    [footerHeight]="50"
+    [footerHeight]="100"
     [rowHeight]="'auto'"
     [rows]="rows"
     [loadingIndicator]="loadingIndicator"
     [selected]="selected"
-    [selectionType]="'checkbox'"
+    [selectionType]="'single'"
     (activate)="onActivate($event)"
     (select)='onSelect($event)'>
+
   <ngx-datatable-column
     [width]="30"
     [sortable]="false"
@@ -23,6 +24,11 @@
     [resizeable]="false"
     [headerCheckboxable]="true"
     [checkboxable]="true">
+  </ngx-datatable-column>
+  <ngx-datatable-column name="edit">
+    <ng-template ngx-datatable-cell-template let-value="value">
+
+    </ng-template>
   </ngx-datatable-column>
   <ngx-datatable-column name="cowId">
     <ng-template ngx-datatable-cell-template let-value="value">
@@ -46,6 +52,7 @@
           [value]="value"
         >
       </ng-template>
+
     </ngx-datatable-column>
 <!--    <ngx-datatable-column name="animalId">-->
 <!--      <ng-template ngx-datatable-cell-template let-value="value">-->
@@ -76,12 +83,19 @@
       {{value}}
     </ng-template>
   </ngx-datatable-column>
+  <ngx-datatable-footer *ngIf="true">
+    <ng-template
+      ngx-datatable-footer-template
+      let-rowCount="rowCount"
+      let-pageSize="pageSize"
+      let-selectedCount="selectedCount"
+      let-curPage="curPage"
+      let-offset="offset"
+    >
+      <button (click)="onDeleteRows(selected)" *ngIf="selected.length > 0" mat-icon-button><mat-icon [matBadge]="selected.length" matBadgeColor="warn" color="primary">delete</mat-icon></button>
+      <button class="ml-10" (click)="addRow()" mat-icon-button><mat-icon color="primary">add</mat-icon></button>
 
+    </ng-template>
+  </ngx-datatable-footer>
 </ngx-datatable>
-
-<button (click)="onDeleteRows(selected)" *ngIf="selected.length > 0" mat-icon-button><mat-icon [matBadge]="selected.length" matBadgeColor="warn" color="primary">delete</mat-icon></button>
-
-<button style="margin-left: 10px" (click)="addRow()" mat-icon-button><mat-icon color="primary">add</mat-icon></button>
-
-
 
