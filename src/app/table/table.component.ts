@@ -18,7 +18,6 @@ export class TableComponent implements OnInit, OnDestroy{
   // Private
   private _unsubscribeAll: Subject<any>;
   editing = {};
-
   temp = [];
   selected = [];
   loadingIndicator: boolean = true;
@@ -33,12 +32,18 @@ export class TableComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-    this.apiService.getData()
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe(res => {
-        this.temp = [...res];
-        this.rows = res;
-      });
+   const initData = localStorage.getItem('mock');
+   if (!initData) {
+     this.apiService.getData()
+       .pipe(takeUntil(this._unsubscribeAll))
+       .subscribe(res => {
+         this.temp = [...res];
+         this.rows = res;
+       });
+   } else{
+     this.rows = JSON.parse(initData);
+   }
+
   }
 
   ngOnDestroy(): void {
@@ -51,6 +56,7 @@ export class TableComponent implements OnInit, OnDestroy{
     this.editing[rowIndex + '-' + cell] = false;
     this.rows[rowIndex][cell] = event.target.value;
     this.rows = [...this.rows];
+    this.saveRows(this.rows);
     console.log('UPDATED!', this.rows[rowIndex][cell]);
   }
 
@@ -66,7 +72,7 @@ export class TableComponent implements OnInit, OnDestroy{
   addRow() {
     const newEl: MockModel = new MockModel();
     this.rows.push(newEl);
-    this.apiService.saveData(this.rows);
+    this.saveRows(this.rows);
   }
 
   onActivate(event) {
@@ -74,23 +80,30 @@ export class TableComponent implements OnInit, OnDestroy{
   }
 
 
-  saveForm(model: MockModel) {
-    const newArr: MockModel[] = this.rows.filter(f => f.cowId === model.cowId);
-    newArr.push(model);
-    this.apiService.saveData(newArr);
+  saveRows(rows: MockModel[]) {
+    this.apiService.saveData(rows);
+  }
+
+  refreshRows() {
+   localStorage.removeItem('mock');
+    this.apiService.getData()
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(res => {
+        this.temp = [...res];
+        this.rows = res;
+        localStorage.setItem('mock', JSON.parse(res));
+      });
   }
 
   onDeleteRows(models: MockModel[]) {
-   let newArr = [];
    models.forEach((e) => {
-     if (models.some(s=>s.cowId !==e.cowId)){
-       newArr = this.rows.filter(f => f.cowId !== e.cowId);
+     let index = this.rows.findIndex(f => f.cowId === e.cowId);
+     if (index !== -1) {
+       this.rows.splice(index, 1);
      }
-
    });
-
-    console.log('newArr', newArr.length);
-    this.apiService.saveData(newArr);
+    console.log('newArr', this.rows.length);
+    this.apiService.saveData(this.rows);
   }
 
 

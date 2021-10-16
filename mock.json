@@ -1,5 +1,4 @@
-{
-  "result": [
+[
     {
       "healthIndex": 85,
       "endDate": null,
@@ -1501,4 +1500,4 @@
       "reportingDateTime": 1514389084
     }
   ]
-}
+
