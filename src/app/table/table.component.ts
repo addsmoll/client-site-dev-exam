@@ -70,17 +70,12 @@ export class TableComponent implements OnInit, OnDestroy{
      this.selected.splice(0, this.selected.length);
      this.selected.push(...selected);
    }
-
   }
 
   addRow() {
-    let newArr = [];
     this.rows.push(Object.assign({}, new MockModel()));
+    this.rows = [...this.rows];
     this.apiService.saveData(this.rows);
-  }
-
-  onActivate(event) {
-    // console.log('Activate Event', event);
   }
 
   saveRows(rows: MockModel[]) {
